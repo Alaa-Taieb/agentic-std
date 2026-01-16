@@ -6,16 +6,15 @@
     Write-Host "  Installing Agentic Coding Standard CLI..." -ForegroundColor Cyan
     Write-Host ""
 
-    # Install the package
-    Write-Host "  Installing package via pip..." -ForegroundColor Gray
-    pip install agentic-std 2>$null
-    if ($?) {
-        Write-Host "  [OK] Package installed" -ForegroundColor Green
-    } else {
-        Write-Host "  [ERROR] Failed to install package. Is pip installed?" -ForegroundColor Red
+    # Install the package from GitHub (until PyPI is available)
+    Write-Host "  Installing package from GitHub..." -ForegroundColor Gray
+    pip install git+https://github.com/Alaa-Taieb/asc-cli.git 2>$null
+    if (-not $?) {
+        Write-Host "  [ERROR] Failed to install package. Is pip and git installed?" -ForegroundColor Red
         Write-Host ""
         return
     }
+    Write-Host "  [OK] Package installed" -ForegroundColor Green
 
     # Get the Python Scripts directory
     $pythonPath = $null
