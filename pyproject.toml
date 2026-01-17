@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentic-std"
-version = "0.1.0"
+version = "0.2.0"
 description = "Agentic Coding Standard CLI - Scaffold .agent/ directories for AI-ready codebases"
 readme = "README.md"
 requires-python = ">=3.10"
