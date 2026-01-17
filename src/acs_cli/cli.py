@@ -7,16 +7,16 @@ from typing import Optional
 import typer
 from rich import print as rprint
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from acs_cli import __version__
+from acs_cli.sync import download_templates, get_cache_info, get_templates_dir
 
 app = typer.Typer(
     name="acs",
     help="Agentic Coding Standard CLI - Scaffold .agent/ directories for AI-ready codebases.",
     add_completion=False,
 )
-
-TEMPLATES_DIR = Path(__file__).parent / "templates"
 
 
 def version_callback(value: bool) -> None:
@@ -52,6 +52,7 @@ def init(
 ) -> None:
     """Initialize .agent/ directory with standard template files."""
     target_dir = Path.cwd() / ".agent"
+    templates_dir = get_templates_dir()
 
     # Check if .agent/ already exists
     if target_dir.exists() and not force:
@@ -71,11 +72,16 @@ def init(
 
     # Copy templates to target
     try:
-        shutil.copytree(TEMPLATES_DIR, target_dir)
+        shutil.copytree(templates_dir, target_dir)
         file_count = len(list(target_dir.glob("*.md")))
+        
+        # Indicate source of templates
+        cache_info = get_cache_info()
+        source = "[dim](cached)[/dim]" if cache_info["exists"] else "[dim](bundled)[/dim]"
+        
         rprint(
             Panel(
-                f"Created [cyan].agent/[/cyan] with [green]{file_count}[/green] files.\n\n"
+                f"Created [cyan].agent/[/cyan] with [green]{file_count}[/green] files. {source}\n\n"
                 "[dim]Files created:[/dim]\n"
                 "  • blueprint.md\n"
                 "  • rules.md\n"
@@ -87,6 +93,44 @@ def init(
         )
     except Exception as e:
         rprint(f"[red]Error:[/red] Failed to create .agent/: {e}")
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def update() -> None:
+    """Update templates from the latest GitHub version."""
+    rprint("")
+    rprint("[cyan]Updating templates from GitHub...[/cyan]")
+    rprint("")
+    
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        transient=True,
+    ) as progress:
+        progress.add_task(description="Downloading templates...", total=None)
+        success, error = download_templates()
+    
+    if success:
+        cache_info = get_cache_info()
+        rprint(
+            Panel(
+                f"Templates updated successfully!\n\n"
+                f"[dim]Cache location:[/dim] {cache_info['path']}\n"
+                f"[dim]Files cached:[/dim] {cache_info['file_count']}",
+                title="[green]✓ Success[/green]",
+                border_style="green",
+            )
+        )
+    else:
+        rprint(
+            Panel(
+                f"[red]Error:[/red] {error}\n\n"
+                "[dim]Tip: Check your internet connection and try again.[/dim]",
+                title="[red]✗ Failed[/red]",
+                border_style="red",
+            )
+        )
         raise typer.Exit(code=1)
 
 

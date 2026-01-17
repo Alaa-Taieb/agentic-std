@@ -14,7 +14,7 @@
 
 - [x] Feature: `acs init` - Creates `.agent/` folder and populates with standard template files
 - [x] Feature: `acs --version` - Displays current version of the installed standard
-- [ ] Feature: `acs update` - Fetches latest templates from the master Agentic-Coding-Standard repository
+- [x] Feature: `acs update` - Fetches latest templates from the master Agentic-Coding-Standard repository
 
 ## Non-Goals
 

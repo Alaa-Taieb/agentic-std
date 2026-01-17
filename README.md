@@ -54,6 +54,14 @@ This creates a `.agent/` directory with:
 acs init --force
 ```
 
+### Update templates
+
+```bash
+acs update
+```
+
+Fetches the latest templates from GitHub and caches them in `~/.acs/templates/`.
+
 ### Check version
 
 ```bash

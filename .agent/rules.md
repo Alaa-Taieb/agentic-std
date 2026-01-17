@@ -36,5 +36,5 @@ acs-cli/
 - [ ] **Unit Tests**: Run `pytest` before marking tasks complete
 - [ ] **Linting**: Ensure code passes `ruff` or `flake8` checks
 - [ ] **Type Checking**: Run `mypy` for type validation
-- [x] **Manual Check**: Test `acs init` in a fresh directory
-- [x] **Build Check**: Verify `pip install -e .` works without errors
+- [x] **Manual Check**: Test `acs init` and `acs update` in a fresh directory
+- [x] **Build Check**: Verify `pip install -e .` and `acs update` work without errors
