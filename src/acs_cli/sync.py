@@ -6,7 +6,7 @@ from typing import Optional
 import httpx
 
 # GitHub raw URLs for template files
-GITHUB_REPO = "Alaa-Taieb/agentic-std"
+GITHUB_REPO = "Alaa-Taieb/Agentic-Coding-Standard"
 GITHUB_BRANCH = "main"
 GITHUB_RAW_BASE = f"https://raw.githubusercontent.com/{GITHUB_REPO}/{GITHUB_BRANCH}"
 
@@ -59,10 +59,10 @@ def download_templates(timeout: float = 30.0) -> tuple[bool, Optional[str]]:
         # Create cache directory
         cache_dir.mkdir(parents=True, exist_ok=True)
         
-        # Download each template file
+        # Download each template file from .agent/ folder
         with httpx.Client(timeout=timeout) as client:
             for template_name in TEMPLATE_FILES:
-                url = f"{GITHUB_RAW_BASE}/src/acs_cli/templates/{template_name}"
+                url = f"{GITHUB_RAW_BASE}/.agent/{template_name}"
                 response = client.get(url)
                 response.raise_for_status()
                 
